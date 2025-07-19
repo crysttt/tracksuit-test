@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import type React from "react";
+import { useContext } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { Button } from "../button/button.tsx";
 import { Modal, type ModalProps } from "../modal/modal.tsx";
@@ -9,9 +10,9 @@ type AddInsightProps = ModalProps & {
   onClose: () => void;
 };
 
-export const AddInsight  = (props: AddInsightProps) => {
+export const AddInsight = (props: AddInsightProps) => {
   const context = useContext(InsightsContext);
-   const addInsight = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const addInsight = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -31,7 +32,9 @@ export const AddInsight  = (props: AddInsightProps) => {
 
       if (!response.ok) {
         // TODO: update this to show on the form
-        throw new Error(`Error adding insight: ${response.status} ${await response.text()}`);
+        throw new Error(
+          `Error adding insight: ${response.status} ${await response.text()}`,
+        );
       }
       await context?.getInsights();
       props.onClose();
@@ -47,7 +50,9 @@ export const AddInsight  = (props: AddInsightProps) => {
       <form className={styles.form} onSubmit={addInsight}>
         <label className={styles.field} htmlFor="brand">
           <select className={styles["field-input"]} name="brand">
-            {BRANDS.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
+            {BRANDS.map(({ id, name }) => (
+              <option key={id} value={id}>{name}</option>
+            ))}
           </select>
         </label>
         <label className={styles.field} htmlFor="text">

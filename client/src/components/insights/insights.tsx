@@ -5,7 +5,6 @@ import type { Insight } from "../../schemas/insight.ts";
 import { useContext } from "react";
 import { InsightsContext } from "../../routes/app.tsx";
 
-
 type InsightsProps = {
   insights: Insight[];
   className?: string;
@@ -22,7 +21,6 @@ export const Insights = ({ insights, className }: InsightsProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-      
       });
 
       if (!response.ok) {
@@ -31,7 +29,6 @@ export const Insights = ({ insights, className }: InsightsProps) => {
 
       console.log("Insight deleted successfully");
       await context?.getInsights();
-      
     } catch (error) {
       console.error("Error deleting insight:", error);
     }
@@ -51,7 +48,8 @@ export const Insights = ({ insights, className }: InsightsProps) => {
                     <span>{createdAt.toString()}</span>
                     <Trash2Icon
                       className={styles["insight-delete"]}
-                      onClick={async () => await deleteInsight(id)}
+                      onClick={async () =>
+                        await deleteInsight(id)}
                     />
                   </div>
                 </div>

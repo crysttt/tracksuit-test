@@ -1,4 +1,3 @@
-import type { Insight } from "$models/insight.ts";
 import type { HasDBClient } from "../shared.ts";
 import * as insightsTable from "$tables/insights.ts";
 

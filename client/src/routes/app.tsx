@@ -8,24 +8,25 @@ type InsightsContextType = {
   getInsights: () => Promise<void>;
 };
 
-export const InsightsContext = createContext<InsightsContextType | undefined>(undefined);
+export const InsightsContext = createContext<InsightsContextType | undefined>(
+  undefined,
+);
 
 export const App = () => {
   const [insights, setInsights] = useState<Insight[]>([]);
-  // set getInsights as a useContext to avoid passing it down through props
-  // set getInsigh
+
   const getInsights = async () => {
     try {
       const response = await fetch(`/api/insights`);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Error fetching insights: ${response.status}`);
       }
       const data = await response.json();
       setInsights(data);
     } catch (error) {
       console.error("Error fetching insights:", error);
     }
-  }
+  };
 
   useEffect(() => {
     getInsights();
