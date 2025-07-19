@@ -5,6 +5,8 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
+import createInsight from "./operations/create-insight.ts";
+import deleteInsight from "./operations/delete-insight.ts";
 
 console.log("Loading configuration");
 
@@ -31,7 +33,7 @@ router.get("/_health", (ctx) => {
 router.get("/insights", (ctx) => {
   const result = listInsights({ db });
   ctx.response.body = result;
-  ctx.response.body = 200;
+  ctx.response.status = 200;
 });
 
 router.get("/insights/:id", (ctx) => {
@@ -41,12 +43,50 @@ router.get("/insights/:id", (ctx) => {
   ctx.response.status = 200;
 });
 
-router.get("/insights/create", (ctx) => {
-  // TODO
+router.post("/insights/create", async (ctx) => {
+  const body = await ctx.request.body.json();
+
+  if (!body.brand || !body.text) {
+    ctx.response.status = 400;
+    ctx.response.body = "Missing brand or text in request body";
+    return;
+  }
+
+  if (isNaN(Number(body.brand)) || typeof body.text !== "string") {
+    ctx.response.status = 400;
+    ctx.response.body = "Invalid brand ID or text in request body";
+    return;
+  }
+
+  createInsight({
+    db,
+    brand: body.brand,
+    text: body.text,
+  });
+
+  ctx.response.status = 200;
 });
 
-router.get("/insights/delete", (ctx) => {
-  // TODO
+router.delete("/insights/delete/:id", (ctx) => {
+  const params = ctx.params as Record<string, any>;
+  if (!params.id) {
+    ctx.response.status = 400;
+    ctx.response.body = "Missing insight ID";
+    return;
+  }
+
+  if (isNaN(Number(params.id))) {
+    ctx.response.status = 400;
+    ctx.response.body = "Invalid insight ID";
+    return;
+  }
+
+  deleteInsight({
+    db,
+    id: params.id,
+  });
+
+  ctx.response.status = 200;
 });
 
 const app = new oak.Application();

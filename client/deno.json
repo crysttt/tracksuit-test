@@ -3,7 +3,7 @@
   "exports": {},
   "$schema": "https://raw.githubusercontent.com/denoland/deno/refs/heads/v2.1/cli/schemas/config-file.v1.json",
   "tasks": {
-    "dev": "deno run -A --env-file=../.env npm:vite",
+    "dev": "deno run -A --env-file=../.env --unstable-no-legacy-abort npm:vite",
     "test": "deno run -A --env-file=../.env npm:vitest run"
   },
   "imports": {
